@@ -1,0 +1,54 @@
+package com.skillconnect.model;
+
+import java.util.List;
+
+import jakarta.persistence.*;
+
+@Entity
+public class Skill {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String name;
+    private String description;
+
+    @ManyToMany(mappedBy = "skills")
+    private List<FreelancerProfile> freelancerProfiles;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<FreelancerProfile> getFreelancerProfiles() {
+		return freelancerProfiles;
+	}
+
+	public void setFreelancerProfiles(List<FreelancerProfile> freelancerProfiles) {
+		this.freelancerProfiles = freelancerProfiles;
+	}
+
+    // Getters and Setters
+    
+}

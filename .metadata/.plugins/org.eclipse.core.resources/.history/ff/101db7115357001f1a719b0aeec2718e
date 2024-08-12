@@ -1,0 +1,34 @@
+package com.skillConnect.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/notifications")
+public class NotificationController {
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @PostMapping
+    public ResponseEntity<Notification> createNotification(@RequestBody Notification notification) {
+        Notification createdNotification = notificationService.createNotification(notification);
+        return new ResponseEntity<>(createdNotification, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<Notification>> getNotificationsByUserId(@PathVariable Long userId) {
+        List<Notification> notifications = notificationService.getNotificationsByUserId(userId);
+        return ResponseEntity.ok(notifications);
+    }
+
+    @PatchMapping("/{id}/read")
+    public ResponseEntity<Void> markNotificationAsRead(@PathVariable Long id) {
+        notificationService.markNotificationAsRead(id);
+        return ResponseEntity.noContent().build();
+    }
+}

@@ -1,0 +1,5 @@
+package com.skillconnect.config;
+
+public class CorsConfig {
+
+}

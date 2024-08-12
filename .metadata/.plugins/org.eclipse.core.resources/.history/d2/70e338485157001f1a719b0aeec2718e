@@ -1,0 +1,63 @@
+package com.skillConnect.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.skillConnect.controller.LoginRequest;
+import com.skillConnect.repository.ClientRepository;
+import com.skillConnect.repository.FreelancerRepository;
+
+@Service
+public class AuthService {
+
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private FreelancerRepository freelancerRepository;
+
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public String authenticateUser(LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+        );
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return jwtUtil.generateToken(userDetails);
+    }
+
+    public void registerClient(RegisterRequest registerRequest) {
+        if (clientRepository.existsByUsername(registerRequest.getUsername())) {
+            throw new RuntimeException("Username is already taken");
+        }
+        Client client = new Client();
+        client.setUsername(registerRequest.getUsername());
+        client.setPassword(bCryptPasswordEncoder.encode(registerRequest.getPassword()));
+        clientRepository.save(client);
+    }
+
+    public void registerFreelancer(RegisterRequest registerRequest) {
+        if (freelancerRepository.existsByUsername(registerRequest.getUsername())) {
+            throw new RuntimeException("Username is already taken");
+        }
+        Freelancer freelancer = new Freelancer();
+        freelancer.setUsername(registerRequest.getUsername());
+        freelancer.setPassword(bCryptPasswordEncoder.encode(registerRequest.getPassword()));
+        freelancerRepository.save(freelancer);
+    }
+}

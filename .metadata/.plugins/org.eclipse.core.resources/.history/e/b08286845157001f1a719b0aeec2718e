@@ -1,0 +1,14 @@
+package com.skillConnect.controller;
+
+import jakarta.validation.constraints.NotBlank;
+
+public class RegisterRequest {
+
+    @NotBlank
+    private String username;
+
+    @NotBlank
+    private String password;
+
+    // Getters and Setters
+}

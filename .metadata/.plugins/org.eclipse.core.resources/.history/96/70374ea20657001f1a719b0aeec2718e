@@ -1,0 +1,52 @@
+package com.skillconnect.controller;
+
+import com.skillconnect.model.Communication;
+import com.skillconnect.service.CommunicationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/communications")
+public class CommunicationController {
+
+    @Autowired
+    private CommunicationService communicationService;
+
+    @GetMapping
+    public List<Communication> getAllCommunications() {
+        return communicationService.getAllCommunications();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Communication> getCommunicationById(@PathVariable int id) {
+        Optional<Communication> communication = communicationService.getCommunicationById(id);
+        return communication.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public Communication createCommunication(@RequestBody Communication communication) {
+        return communicationService.saveCommunication(communication);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Communication> updateCommunication(@PathVariable int id, @RequestBody Communication communication) {
+        if (!communicationService.getCommunicationById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        communication.setId(id);
+        return ResponseEntity.ok(communicationService.saveCommunication(communication));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCommunication(@PathVariable int id) {
+        if (!communicationService.getCommunicationById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        communicationService.deleteCommunication(id);
+        return ResponseEntity.noContent().build();
+    }
+}

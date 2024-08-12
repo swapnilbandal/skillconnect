@@ -1,0 +1,37 @@
+package com.skillconnect.model;
+
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+public class Project {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "business_id")
+    private User business;
+
+    private String title;
+    private String description;
+    private double budget;
+    private String deadline;
+    private String projectType; // e.g., FIXED_PRICE, BIDDING
+    private String status;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<Bid> bids;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<Communication> communications;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<NDA> ndas;
+
+    // Getters and Setters
+}

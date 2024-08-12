@@ -1,0 +1,11 @@
+package com.skillconnect.service;
+
+import com.skillconnect.model.Freelancer;
+import com.skillconnect.model.Project;
+
+import java.util.List;
+
+public interface MatchingService {
+    List<Freelancer> matchFreelancersToProject(Project project);
+    List<Project> matchProjectsToFreelancer(Freelancer freelancer);
+}

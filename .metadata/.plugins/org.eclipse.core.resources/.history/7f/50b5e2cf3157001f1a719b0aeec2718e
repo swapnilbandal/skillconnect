@@ -1,0 +1,36 @@
+package com.skillConnect.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+public class Message {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String messageText;
+    private LocalDateTime timestamp;
+
+    // Many-to-One relationship with Client (as sender or receiver)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private Client senderClient;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
+    private Freelancer receiverFreelancer;
+
+    // Many-to-One relationship with Freelancer (as sender or receiver)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private Freelancer senderFreelancer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
+    private Client receiverClient;
+
+    // Getters and Setters
+    // ...
+}

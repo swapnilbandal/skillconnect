@@ -1,0 +1,23 @@
+package com.skillConnect.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+
+@Entity
+public class EarningTracker {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Double totalEarnings;
+    private LocalDate lastPaymentDate;
+
+    // One-to-One relationship with Freelancer
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "freelancer_id", nullable = false)
+    private Freelancer freelancer;
+
+    // Getters and Setters
+    // ...
+}

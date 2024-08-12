@@ -1,0 +1,48 @@
+package com.skillConnect.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ProjectService {
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
+
+    public Project createProject(Project project, Long clientId) {
+        Optional<Client> client = clientRepository.findById(clientId);
+        if (client.isPresent()) {
+            project.setClient(client.get());
+            return projectRepository.save(project);
+        }
+        return null;
+    }
+
+    public Optional<Project> getProjectById(Long id) {
+        return projectRepository.findById(id);
+    }
+
+    public List<Project> getAllProjects() {
+        return projectRepository.findAll();
+    }
+
+    public Project updateProject(Long id, Project updatedProject) {
+        if (projectRepository.existsById(id)) {
+            updatedProject.setId(id);
+            return projectRepository.save(updatedProject);
+        }
+        return null;
+    }
+
+    public void deleteProject(Long id) {
+        projectRepository.deleteById(id);
+    }
+
+    // Additional methods if needed
+}
+

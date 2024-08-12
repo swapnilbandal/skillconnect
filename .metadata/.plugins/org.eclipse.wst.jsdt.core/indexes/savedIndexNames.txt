@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+D:\skill-connect\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+1859928255.index
+4279223702.index
+1965174767.index
+2362609844.index
+457771548.index
+562471397.index

@@ -1,0 +1,5 @@
+package com.skillconnect.repository;
+
+public interface x {
+
+}

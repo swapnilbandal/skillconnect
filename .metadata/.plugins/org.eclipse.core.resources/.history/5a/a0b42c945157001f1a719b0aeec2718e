@@ -1,0 +1,13 @@
+package com.skillConnect.controller;
+
+
+public class RegisterRequest {
+
+    @NotBlank
+    private String username;
+
+    @NotBlank
+    private String password;
+
+    // Getters and Setters
+}

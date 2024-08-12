@@ -1,0 +1,35 @@
+package com.skillConnect.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class NotificationService {
+
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+    public Notification createNotification(Notification notification) {
+        // Additional logic for creating a notification
+        return notificationRepository.save(notification);
+    }
+
+    public List<Notification> getNotificationsByUserId(Long userId) {
+        // Logic to get notifications for a user
+        return notificationRepository.findByUserId(userId);
+    }
+
+    public void markNotificationAsRead(Long id) {
+        Optional<Notification> notification = notificationRepository.findById(id);
+        if (notification.isPresent()) {
+            Notification notif = notification.get();
+            notif.setIsRead(true);
+            notificationRepository.save(notif);
+        }
+    }
+
+    // Additional methods if needed
+}
+

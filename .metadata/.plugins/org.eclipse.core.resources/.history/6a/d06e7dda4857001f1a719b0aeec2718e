@@ -1,0 +1,106 @@
+package com.skillConnect.model;
+
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+public class Freelancer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    private String password;
+
+    // Many-to-Many relationship with Skill
+    @ManyToMany
+    @JoinTable(
+        name = "Freelancer_Skill",
+        joinColumns = @JoinColumn(name = "freelancer_id"),
+        inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Skill> skills;
+
+    // One-to-One relationship with EarningTracker
+    @OneToOne(mappedBy = "freelancer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private EarningTracker earningTracker;
+
+    // One-to-Many relationship with Bid
+    @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Bid> bids;
+
+    // One-to-Many relationship with Review
+    @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Review> reviews;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public List<Skill> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<Skill> skills) {
+		this.skills = skills;
+	}
+
+	public EarningTracker getEarningTracker() {
+		return earningTracker;
+	}
+
+	public void setEarningTracker(EarningTracker earningTracker) {
+		this.earningTracker = earningTracker;
+	}
+
+	public List<Bid> getBids() {
+		return bids;
+	}
+
+	public void setBids(List<Bid> bids) {
+		this.bids = bids;
+	}
+
+	public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
+
+    
+}

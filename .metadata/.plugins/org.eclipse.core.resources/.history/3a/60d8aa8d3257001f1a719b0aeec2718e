@@ -1,0 +1,41 @@
+package com.skillConnect.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class PaymentService {
+
+    @Autowired
+    private PaymentRepository paymentRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private FreelancerRepository freelancerRepository;
+
+    public Payment processPayment(Payment payment, Long projectId, Long freelancerId) {
+        Optional<Project> project = projectRepository.findById(projectId);
+        Optional<Freelancer> freelancer = freelancerRepository.findById(freelancerId);
+        if (project.isPresent() && freelancer.isPresent()) {
+            payment.setProject(project.get());
+            payment.setFreelancer(freelancer.get());
+            return paymentRepository.save(payment);
+        }
+        return null;
+    }
+
+    public Optional<Payment> getPaymentById(Long id) {
+        return paymentRepository.findById(id);
+    }
+
+    public List<Payment> getPaymentsByFreelancerId(Long freelancerId) {
+        // Logic to get payments for a freelancer
+        return paymentRepository.findByFreelancerId(freelancerId);
+    }
+
+    // Additional methods if needed
+}

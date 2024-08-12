@@ -1,0 +1,53 @@
+package com.skillConnect.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/freelancers")
+public class FreelancerController {
+
+    @Autowired
+    private FreelancerService freelancerService;
+
+    @PostMapping
+    public ResponseEntity<Freelancer> registerFreelancer(@RequestBody Freelancer freelancer) {
+        Freelancer registeredFreelancer = freelancerService.registerFreelancer(freelancer);
+        return new ResponseEntity<>(registeredFreelancer, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Freelancer> getFreelancerById(@PathVariable Long id) {
+        Optional<Freelancer> freelancer = freelancerService.getFreelancerById(id);
+        return freelancer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Freelancer>> getAllFreelancers() {
+        List<Freelancer> freelancers = freelancerService.getAllFreelancers();
+        return ResponseEntity.ok(freelancers);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Freelancer> updateFreelancer(@PathVariable Long id, @RequestBody Freelancer freelancer) {
+        Freelancer updatedFreelancer = freelancerService.updateFreelancer(id, freelancer);
+        return updatedFreelancer != null ? ResponseEntity.ok(updatedFreelancer) : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFreelancer(@PathVariable Long id) {
+        freelancerService.deleteFreelancer(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{freelancerId}/skills/{skillId}")
+    public ResponseEntity<Void> addSkillToFreelancer(@PathVariable Long freelancerId, @PathVariable Long skillId) {
+        freelancerService.addSkillToFreelancer(freelancerId, skillId);
+        return ResponseEntity.ok().build();
+    }
+}

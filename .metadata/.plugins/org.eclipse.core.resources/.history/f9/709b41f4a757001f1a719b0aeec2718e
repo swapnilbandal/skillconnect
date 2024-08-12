@@ -1,0 +1,35 @@
+package com.skillConnect.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.skillConnect.service.AuthService;
+
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    @Autowired
+    private AuthService authService;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+        String token = authService.authenticateUser(loginRequest);
+        return ResponseEntity.ok(new AuthResponse(token));
+    }
+
+    @PostMapping("/register/client")
+    public ResponseEntity<?> registerClient(@Valid @RequestBody RegisterRequest registerRequest) {
+        authService.registerClient(registerRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/register/freelancer")
+    public ResponseEntity<?> registerFreelancer(@Valid @RequestBody RegisterRequest registerRequest) {
+        authService.registerFreelancer(registerRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+}

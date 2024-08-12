@@ -1,0 +1,29 @@
+package com.skillconnect.controller;
+
+import com.skillconnect.model.Freelancer;
+import com.skillconnect.model.Project;
+import com.skillconnect.service.MatchingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/match")
+public class MatchingController {
+
+    @Autowired
+    private MatchingService matchingService;
+
+    @GetMapping("/freelancers/{projectId}")
+    public List<Freelancer> getMatchingFreelancers(@PathVariable int projectId) {
+        Project project = projectService.getProjectById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        return matchingService.matchFreelancersToProject(project);
+    }
+
+    @GetMapping("/projects/{freelancerId}")
+    public List<Project> getMatchingProjects(@PathVariable int freelancerId) {
+        Freelancer freelancer = freelancerService.getFreelancerById(freelancerId).orElseThrow(() -> new ResourceNotFoundException("Freelancer not found"));
+        return matchingService.matchProjectsToFreelancer(freelancer);
+    }
+}

@@ -1,0 +1,47 @@
+package com.skillConnect.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/bids")
+public class BidController {
+
+    @Autowired
+    private BidService bidService;
+
+    @PostMapping
+    public ResponseEntity<Bid> placeBid(@RequestBody Bid bid, @RequestParam Long projectId, @RequestParam Long freelancerId) {
+        Bid placedBid = bidService.placeBid(bid, projectId, freelancerId);
+        return new ResponseEntity<>(placedBid, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Bid> getBidById(@PathVariable Long id) {
+        Optional<Bid> bid = bidService.getBidById(id);
+        return bid.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Bid>> getAllBids() {
+        List<Bid> bids = bidService.getAllBids();
+        return ResponseEntity.ok(bids);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Bid> updateBid(@PathVariable Long id, @RequestBody Bid bid) {
+        Bid updatedBid = bidService.updateBid(id, bid);
+        return updatedBid != null ? ResponseEntity.ok(updatedBid) : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBid(@PathVariable Long id) {
+        bidService.deleteBid(id);
+        return ResponseEntity.noContent().build();
+    }
+}

@@ -1,0 +1,26 @@
+package com.skillConnect.model;
+
+import jakarta.persistence.*;
+
+@Entity
+public class Notification {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String message;
+    private Boolean isRead;
+
+    // Polymorphic Many-to-One relationship with Client and Freelancer
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private Client client;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private Freelancer freelancer;
+
+    // Getters and Setters
+    // ...
+}

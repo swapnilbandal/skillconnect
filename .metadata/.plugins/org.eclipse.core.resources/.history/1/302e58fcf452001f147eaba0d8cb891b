@@ -1,0 +1,37 @@
+package com.skillconnect.service.impl;
+
+import com.skillconnect.model.Communication;
+import com.skillconnect.repository.CommunicationRepository;
+import com.skillconnect.service.CommunicationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class CommunicationServiceImpl implements CommunicationService {
+
+    @Autowired
+    private CommunicationRepository communicationRepository;
+
+    @Override
+    public List<Communication> getAllCommunications() {
+        return communicationRepository.findAll();
+    }
+
+    @Override
+    public Optional<Communication> getCommunicationById(int id) {
+        return communicationRepository.findById(id);
+    }
+
+    @Override
+    public Communication saveCommunication(Communication communication) {
+        return communicationRepository.save(communication);
+    }
+
+    @Override
+    public void deleteCommunication(int id) {
+        communicationRepository.deleteById(id);
+    }
+}

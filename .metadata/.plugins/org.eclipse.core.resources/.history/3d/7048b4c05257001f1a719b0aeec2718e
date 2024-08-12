@@ -1,0 +1,28 @@
+package com.skillConnect.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/earning-trackers")
+public class EarningTrackerController {
+
+    @Autowired
+    private EarningTrackerService earningTrackerService;
+
+    @PostMapping("/{freelancerId}")
+    public ResponseEntity<EarningTracker> createOrUpdateEarningTracker(@PathVariable Long freelancerId, @RequestBody EarningTracker earningTracker) {
+        EarningTracker createdOrUpdatedTracker = earningTrackerService.createOrUpdateEarningTracker(freelancerId, earningTracker);
+        return new ResponseEntity<>(createdOrUpdatedTracker, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/freelancers/{freelancerId}")
+    public ResponseEntity<EarningTracker> getEarningTrackerByFreelancerId(@PathVariable Long freelancerId) {
+        Optional<EarningTracker> earningTracker = earningTrackerService.getEarningTrackerByFreelancerId(freelancerId);
+        return earningTracker.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+}

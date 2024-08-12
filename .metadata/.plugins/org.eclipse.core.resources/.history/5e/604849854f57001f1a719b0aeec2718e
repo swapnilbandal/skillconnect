@@ -1,0 +1,31 @@
+package com.skillConnect.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.Optional;
+
+@Service
+public class EarningTrackerService {
+
+    @Autowired
+    private EarningTrackerRepository earningTrackerRepository;
+
+    @Autowired
+    private FreelancerRepository freelancerRepository;
+
+    public EarningTracker createOrUpdateEarningTracker(Long freelancerId, EarningTracker earningTracker) {
+        Optional<Freelancer> freelancer = freelancerRepository.findById(freelancerId);
+        if (freelancer.isPresent()) {
+            earningTracker.setFreelancer(freelancer.get());
+            return earningTrackerRepository.save(earningTracker);
+        }
+        return null;
+    }
+
+    public Optional<EarningTracker> getEarningTrackerByFreelancerId(Long freelancerId) {
+        return earningTrackerRepository.findByFreelancerId(freelancerId);
+    }
+
+    // Additional methods if needed
+}
+

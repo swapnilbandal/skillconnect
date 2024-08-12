@@ -1,0 +1,29 @@
+package com.skillConnect.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/messages")
+public class MessageController {
+
+    @Autowired
+    private MessageService messageService;
+
+    @PostMapping
+    public ResponseEntity<Message> sendMessage(@RequestBody Message message) {
+        Message sentMessage = messageService.sendMessage(message);
+        return new ResponseEntity<>(sentMessage, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Message>> getMessagesBetweenUsers(@RequestParam Long senderId, @RequestParam Long receiverId) {
+        List<Message> messages = messageService.getMessagesBetweenUsers(senderId, receiverId);
+        return ResponseEntity.ok(messages);
+    }
+}
+

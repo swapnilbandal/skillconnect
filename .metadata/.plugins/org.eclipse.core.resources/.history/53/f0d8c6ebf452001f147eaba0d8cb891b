@@ -1,0 +1,12 @@
+package com.skillconnect.service;
+
+import com.skillconnect.model.Communication;
+import java.util.List;
+import java.util.Optional;
+
+public interface CommunicationService {
+    List<Communication> getAllCommunications();
+    Optional<Communication> getCommunicationById(int id);
+    Communication saveCommunication(Communication communication);
+    void deleteCommunication(int id);
+}

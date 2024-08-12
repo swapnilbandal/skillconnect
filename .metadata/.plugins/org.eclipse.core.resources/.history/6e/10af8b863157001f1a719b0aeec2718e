@@ -1,0 +1,43 @@
+package com.skillConnect.model;
+
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+public class Freelancer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    private String password;
+
+    // Many-to-Many relationship with Skill
+    @ManyToMany
+    @JoinTable(
+        name = "Freelancer_Skill",
+        joinColumns = @JoinColumn(name = "freelancer_id"),
+        inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Skill> skills;
+
+    // One-to-One relationship with EarningTracker
+    @OneToOne(mappedBy = "freelancer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private EarningTracker earningTracker;
+
+    // One-to-Many relationship with Bid
+    @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Bid> bids;
+
+    // One-to-Many relationship with Review
+    @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Review> reviews;
+
+    // Getters and Setters
+    // ...
+}

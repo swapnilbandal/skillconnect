@@ -1,0 +1,54 @@
+package com.skillConnect.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class FreelancerService {
+
+    @Autowired
+    private FreelancerRepository freelancerRepository;
+
+    @Autowired
+    private SkillRepository skillRepository;
+
+    public Freelancer registerFreelancer(Freelancer freelancer) {
+        // Additional registration logic if needed
+        return freelancerRepository.save(freelancer);
+    }
+
+    public Optional<Freelancer> getFreelancerById(Long id) {
+        return freelancerRepository.findById(id);
+    }
+
+    public List<Freelancer> getAllFreelancers() {
+        return freelancerRepository.findAll();
+    }
+
+    public Freelancer updateFreelancer(Long id, Freelancer updatedFreelancer) {
+        if (freelancerRepository.existsById(id)) {
+            updatedFreelancer.setId(id);
+            return freelancerRepository.save(updatedFreelancer);
+        }
+        return null;
+    }
+
+    public void deleteFreelancer(Long id) {
+        freelancerRepository.deleteById(id);
+    }
+
+    public void addSkillToFreelancer(Long freelancerId, Long skillId) {
+        Optional<Freelancer> freelancer = freelancerRepository.findById(freelancerId);
+        Optional<Skill> skill = skillRepository.findById(skillId);
+        if (freelancer.isPresent() && skill.isPresent()) {
+            Freelancer f = freelancer.get();
+            f.getSkills().add(skill.get());
+            freelancerRepository.save(f);
+        }
+    }
+
+    // Additional methods if needed
+}
+

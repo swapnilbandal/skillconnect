@@ -1,0 +1,44 @@
+package com.skillConnect.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ReviewService {
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private FreelancerRepository freelancerRepository;
+
+    public Review addReview(Review review, Long projectId, Long freelancerId) {
+        Optional<Project> project = projectRepository.findById(projectId);
+        Optional<Freelancer> freelancer = freelancerRepository.findById(freelancerId);
+        if (project.isPresent() && freelancer.isPresent()) {
+            review.setProject(project.get());
+            review.setFreelancer(freelancer.get());
+            return reviewRepository.save(review);
+        }
+        return null;
+    }
+
+    public Optional<Review> getReviewById(Long id) {
+        return reviewRepository.findById(id);
+    }
+
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
+    }
+
+    public void deleteReview(Long id) {
+        reviewRepository.deleteById(id);
+    }
+
+    // Additional methods if needed
+}

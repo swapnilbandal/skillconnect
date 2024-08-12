@@ -1,0 +1,35 @@
+package com.skillConnect.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/payments")
+public class PaymentController {
+
+    @Autowired
+    private PaymentService paymentService;
+
+    @PostMapping
+    public ResponseEntity<Payment> processPayment(@RequestBody Payment payment, @RequestParam Long projectId, @RequestParam Long freelancerId) {
+        Payment processedPayment = paymentService.processPayment(payment, projectId, freelancerId);
+        return new ResponseEntity<>(processedPayment, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Payment> getPaymentById(@PathVariable Long id) {
+        Optional<Payment> payment = paymentService.getPaymentById(id);
+        return payment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/freelancers/{freelancerId}")
+    public ResponseEntity<List<Payment>> getPaymentsByFreelancerId(@PathVariable Long freelancerId) {
+        List<Payment> payments = paymentService.getPaymentsByFreelancerId(freelancerId);
+        return ResponseEntity.ok(payments);
+    }
+}

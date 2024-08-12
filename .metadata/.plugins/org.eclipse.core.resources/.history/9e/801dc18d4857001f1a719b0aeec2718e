@@ -1,0 +1,7 @@
+package com.skillConnect.service;
+
+public interface AuthenticatedUser {
+    Long getId();
+    String getUsername();
+    String getPassword();
+}

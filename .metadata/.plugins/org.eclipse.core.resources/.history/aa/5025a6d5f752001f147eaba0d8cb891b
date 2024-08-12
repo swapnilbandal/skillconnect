@@ -1,0 +1,43 @@
+package com.skillconnect.service;
+
+import com.skillconnect.model.Freelance;
+import com.skillconnect.model.Project;
+import com.skillconnect.repository.FreelancerRepository;
+import com.skillconnect.repository.ProjectRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class MatchingService {
+
+    @Autowired
+    private FreelancerRepository freelancerRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    public List<Freelance> matchFreelancersToProject(Project project) {
+        List<Freelance> freelancers = freelancerRepository.findAll();
+
+        // Example matching logic
+        return freelancers.stream()
+            .filter(freelancer -> 
+                freelancer.getSkills().containsAll(project.getRequiredSkills()) &&
+                freelancer.getExperience() >= project.getRequiredExperience())
+            .collect(Collectors.toList());
+    }
+
+    public List<Project> matchProjectsToFreelancer(Freelancer freelancer) {
+        List<Project> projects = projectRepository.findAll();
+
+        // Example matching logic
+        return projects.stream()
+            .filter(project -> 
+                project.getRequiredSkills().containsAll(freelancer.getSkills()) &&
+                freelancer.getExperience() >= project.getRequiredExperience())
+            .collect(Collectors.toList());
+    }
+}
